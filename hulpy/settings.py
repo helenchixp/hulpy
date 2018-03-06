@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['172.16.185.65', 'v1l06603', '127.0.0.1', 'localhost']
 # Application definition
 
 INSTALLED_APPS = [
+    'hulsite.apps.HulsiteConfig',    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
