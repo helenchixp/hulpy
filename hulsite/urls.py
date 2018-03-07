@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('Send/', views.send, name='send list'),
-    path('Recv/', views.receive, name='recv list'),
-    path('<int:type_id>/', views.type_switch, name='type switch'),
+    path('Send/<str:file_id>', views.send, name='Send'),
+    path('Recv/<str:file_id>', views.receive, name='Receive'),
+    path('<int:type_id>/', views.list, name='type switch'),
 ]

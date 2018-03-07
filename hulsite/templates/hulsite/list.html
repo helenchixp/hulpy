@@ -1,0 +1,17 @@
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        {{ type_name }}
+        {% if management_info_list %}
+        <ul>
+        {% for info in management_info_list %}
+            <li>
+                <a href="{% url type_name info.FileID %}">{{ info.FileID }} {{info.Comment}}</a>
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    </body>
+</html>
