@@ -1,37 +1,103 @@
+# -*- coding: utf-8 -*-
+
+"""
+This python module is redirect views in django
+"""
+import json
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from .models import DataBaseInfo
 from controller.managerdb import ConnectDB
-
+ 
 
 # Create your views here.
 # url index view
 def index(request):
     return HttpResponse("Hello, hul!!")
 
-# url /hulsite/Send/
-def send(request, file_id):
-    return HttpResponse("This is Send %s" % file_id);
-
-def receive(request, file_id):
-    return HttpResponse("This is Receive %s ." % file_id);
-
-def list(request, type_id):
-    # if databaseinfo table is not existed by this id
+#################################################
+def detail(request, type_id, type_name, file_id):
+    """
+    this method will be get detail by fileid,
+    and redirect to ~/<type_id>/<type_name>/<file_id>
+    """
     try:
+        dbinfo = DataBaseInfo.objects.get(id=type_id)
+    except DataBaseInfo.DoesNotExist:
+        raise Http404('Type id is Wrong!!!')
+
+    try:
+        table_name = dbinfo.tableinfo_set.get(pk=type_id, table_name=type_name)
+    except:
+        raise Http404('Table name is wrong!!!!!')
+    
+    detail_info = ConnectDB(dbinfo.db_filename).get_detail_by_fileid(table_name, file_id)
+    context = {
+            'type_id': type_id,
+            'table_name': table_name,
+            'detail_info': detail_info, 
+            }
+    return render(request, 'hulsite/detail.html', context)
+
+#################################################
+def list(request, type_id):
+    """
+    this method will be get the managementinfo list by type_id,
+    and redirect to ~/<type_id>/
+    @param request the http request.
+    @param type_id the type id from url
+    @return return the httpresponse
+    """
+    try:
+        # if databaseinfo table is not existed by this id
         dbinfo = DataBaseInfo.objects.get(id=type_id)
     except DataBaseInfo.DoesNotExist:
         raise Http404("This typeid is not existed.")
 
-    # if tableinfo table hasnot row
     try:
+        # if tableinfo table hasnot row
         table_name = dbinfo.tableinfo_set.get().table_name
     except:
         raise Http404('TableInfo matching query does not exist.')
     context = {
+            'type_id': type_id,
             'type_name': table_name,
-            'management_info_list': ConnectDB(dbinfo).search(table_name),
+            'management_info_list': ConnectDB(dbinfo.db_filename).search(table_name),
             }
     return render(request, 'hulsite/list.html', context)
+
+
+#################################################
+def update(request, type_id, type_name, file_id):
+    """
+    this method will be get the managementinfo list by type_id,              
+    and redirect to ~/<type_id>/<type_name>/<file_id>/update
+    @param request the http request. 
+    @param type_id the type id from url 
+    @param type_name the type name from url 
+    @param type_id the type id from url 
+    @return return the httpresponse
+    """
+
+    try:
+        # if databaseinfo table is not existed by this id
+        dbinfo = DataBaseInfo.objects.get(id=type_id)
+    except DataBaseInfo.DoesNotExist: 
+        raise Http404("This typeid is not existed.")
+
+    try:                                             
+       # if tableinfo table hasnot row                   
+       table_name = dbinfo.tableinfo_set.get().table_name                 
+    except:
+        raise Http404('TableInfo matching query does not exist.')
+    # update the info by sqlite3
+    upd_info = dict(request.POST.items())
+    ConnectDB(dbinfo.db_filename).update(table_name, upd_info)
+
+    return HttpResponseRedirect(reverse('detail', args=(type_id,
+                                                        type_name,
+                                                        upd_info['FileID'])))
+

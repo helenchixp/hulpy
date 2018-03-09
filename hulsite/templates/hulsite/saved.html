@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>Detail Info [ {{ detail_info.FileID }} ]</title>
+    </head>
+    <body>
+        {% if detail_info %}
+        <table>
+            <thead>
+                <tr>
+                    <td>
+                        [ {{ detail_info.FileID }} ] is Saved!!!
+                    </td>
+                </tr>
+            </thead>
+            {% for key, val in detail_info.items %}
+            <tr>
+                <td>{{ key }}</td>
+                {% if val %}
+                <td>{{ val }}</td>
+                {% else %}
+                <td>
+                    <input type="text" value="{{ val }}" />
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="Update" />
+                        <input type="button" value="Clear" />
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        {% else %}
+        <p> No Detail Data! </p>        
+        {% endif %}
+    </body>
+
+</html>
