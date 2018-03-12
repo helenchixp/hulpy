@@ -1,0 +1,18 @@
+
+{% block sidebar %}    
+{% if database_info %}
+<ul>
+    {% for info in database_info%}
+        <li>
+        {% if management_info_list %}
+            <a href="../{{ info.id }}">{{ info.info_type }}</a>
+        {% else %}
+            <a href="../../../{{ info.id }}">{{ info.info_type }}</a> 
+        {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <p> Management is Null!!   !!!!</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% block footer %}
+
+<ul>
+    <li style="float:left"><a href="#"> First </a></li>
+
+    {% for ii in management_info_list.count %}
+        <li style="float:left"><a href="#"> {{ i }} </a></li>
+    {% endfor %}
+
+    <li><a href="#"> End </a></li>
+</ul>
+
+{% endblock %}

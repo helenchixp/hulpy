@@ -1,17 +1,15 @@
-<html>
-    <head>
-        <title></title>
-    </head>
-    <body>
-        {{ type_name }}
-        {% if management_info_list %}
-        <ul>
-        {% for info in management_info_list %}
-            <li>
-                <a href="{% url 'detail' type_id  type_name info.FileID %}">{{ info.FileID }} {{info.Comment}}</a>
-            </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-    </body>
-</html>
+{% extends "hulsite/base.html" %}
+
+{% block content %}
+{{ type_name }}
+{% if management_info_list %}
+<ul>
+    {% for info in management_info_list %}
+    <li>
+        <a href="{% url 'detail' type_id  type_name info.FileID %}">{{ info.FileID }} {{info.Comment}}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}        

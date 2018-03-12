@@ -1,8 +1,6 @@
-<html>
-    <head>
-        <title>Detail Info [ {{ detail_info.FileID }} ]</title>
-    </head>
-    <body>
+{% extends "hulsite/base.html" %}
+
+{% block content %}
         <form action="{% url 'update' type_id table_name detail_info.FileID %}" method="post">
             {% csrf_token %}
         {% if detail_info %}
@@ -34,6 +32,4 @@
         <p> No Detail Data! </p>        
         {% endif %}
         </form>
-    </body>
-
-</html>
+{% endblock %}

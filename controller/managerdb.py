@@ -51,6 +51,9 @@ class ConnectDB(object):
 
 
     def update(self, table_name, detail_info):
+        """
+        
+        """
         with closing(sqlite3.connect(self.db_filename)) as conn:
             sql = """
                     update %s set
@@ -66,4 +69,3 @@ class ConnectDB(object):
                 'fileid': detail_info['FileID']
                 })
             conn.commit()
-        print("---------------", detail_info)

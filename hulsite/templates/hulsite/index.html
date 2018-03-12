@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <div id="sidebar">
+            {% block sidebar %}    
+            {% if database_info %}
+            <ul>
+            {% for info in database_info%}
+                <li>
+                    <a href="./{{ info.id }}">{{ info.info_type }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+            {% else %}
+            <p> Management is Null!! </p>
+            {% endif %}
+            {% endblock %}
+        </div>
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

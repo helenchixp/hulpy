@@ -8,10 +8,22 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views import generic
 
 from .models import DataBaseInfo
 from controller.managerdb import ConnectDB
  
+
+#################################################
+class IndexView(generic.ListView):
+    template_name = 'hulsite/index.html'
+    context_object_name = "database_info"
+
+    def get_queryset(self):
+        """
+        return the type of DatabaseInfo
+        """
+        return DataBaseInfo.objects.all()
 
 # Create your views here.
 # url index view
@@ -36,6 +48,7 @@ def detail(request, type_id, type_name, file_id):
     
     detail_info = ConnectDB(dbinfo.db_filename).get_detail_by_fileid(table_name, file_id)
     context = {
+            'database_info': DataBaseInfo.objects.all(),
             'type_id': type_id,
             'table_name': table_name,
             'detail_info': detail_info, 
@@ -63,6 +76,7 @@ def list(request, type_id):
     except:
         raise Http404('TableInfo matching query does not exist.')
     context = {
+            'database_info': DataBaseInfo.objects.all(),
             'type_id': type_id,
             'type_name': table_name,
             'management_info_list': ConnectDB(dbinfo.db_filename).search(table_name),
